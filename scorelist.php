@@ -29,16 +29,16 @@
 
     try {
         // Maak verbinding met de database
-        $conn = new mysqli($host, $user, $pass, $database);
+        $connection = new mysqli($host, $user, $pass, $database);
 
         // Controleer op fouten in de verbinding
-        if ($conn->connect_error) {
-            throw new Exception("Verbindingsfout: " . $conn->connect_error);
+        if ($connection->connect_error) {
+            throw new Exception("Verbindingsfout: " . $connection->connect_error);
         }
 
         // Query om gebruikers en scores op te halen uit de registratie-tabel
         $query = "SELECT user, score FROM registration ORDER BY score DESC";
-        $result = $conn->query($query);
+        $result = $connection->query($query);
 
         // Controleer of er resultaten zijn gevonden
         if ($result->num_rows > 0) {
@@ -65,8 +65,8 @@
         echo "Fout: " . $e->getMessage();
     } finally {
         // Sluit de databaseverbinding af
-        if ($conn) {
-            $conn->close();
+        if ($connection) {
+            $connection->close();
         }
     }
     ?>
