@@ -17,8 +17,8 @@
     </form>
 
     <?php
-    session_start();
-    ini_set('display_errors', 1);
+    session_start(); // Start de sessie voor de gebruiker
+    ini_set('display_errors', 1); // Schakel foutmeldingen in voor debugging
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
@@ -29,20 +29,22 @@
         $database = "game";
 
         try {
+            // Maak verbinding met de database
             $connection = new mysqli($host, $user, $pass, $database);
 
+            // Controleer op verbindingsfout en gooi een uitzondering
             if ($connection->connect_error) {
                 throw new Exception("Connection failed: " . $connection->connect_error);
             }
 
-            // Get form data
+            // Ophalen van formulierdata
             $username = $_POST['user'];
             $password = $_POST['password'];
 
-            // Prepare and execute the query to get user data
+            // Voorbereiden en uitvoeren van de query om gebruikersgegevens op te halen
             $query = "SELECT * FROM registration WHERE user = ?";
-            $statement = $conn->prepare($query);
-            $statement->bind_param("ss", $username, $password);
+            $statement = $connection->prepare($query); // Gebruik de correcte variabele $connection
+            $statement->bind_param("s", $username); // Alleen gebruikersnaam binden, wachtwoord niet in de query
             $statement->execute();
             $result = $statement->get_result();
 
@@ -61,17 +63,15 @@
                     echo "<p>Onjuist wachtwoord.</p>";
                 }
             } else {
-                // Geeft een melding als de gebruiker niet bestaat/niet geregistreet heeft.
+                // Geeft een melding als de gebruiker niet bestaat/niet geregistreerd heeft.
                 echo "<p>Gebruiker niet gevonden.</p>";
             }
-            
-
-            $statement->close();
+            $statement->close(); // Sluit de statement
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getMessage(); // Toon de foutmelding als er een uitzondering wordt gegooid
         } finally {
             if ($connection) {
-                $connection->close();
+                $connection->close(); // Sluit de databaseverbinding
             }
         }
     }
