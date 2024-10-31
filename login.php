@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Login</title>
 </head>
 <body>
@@ -29,10 +29,10 @@
         $database = "game";
 
         try {
-            $conn = new mysqli($host, $user, $pass, $database);
+            $connection = new mysqli($host, $user, $pass, $database);
 
-            if ($conn->connect_error) {
-                throw new Exception("Connection failed: " . $conn->connect_error);
+            if ($connection->connect_error) {
+                throw new Exception("Connection failed: " . $connection->connect_error);
             }
 
             // Get form data
@@ -42,30 +42,36 @@
             // Prepare and execute the query to get user data
             $query = "SELECT * FROM registration WHERE user = ?";
             $statement = $conn->prepare($query);
-            $statement->bind_param("s", $username);
+            $statement->bind_param("ss", $username, $password);
             $statement->execute();
             $result = $statement->get_result();
 
-            if ($result->num_rows > 0) {
+            if ($result->num_rows > 0) { 
+                // Controleer of er een gebruiker met de opgegeven gebruikersnaam is gevonden.
                 $row = $result->fetch_assoc();
-                // Verify the password
+            
+                // Verifieer het wachtwoord
                 if (password_verify($password, $row['password'])) {
+                    // Start een sessie en stuurt de gebruiker door naar scorelist.php bij een succesvolle inlog.
                     $_SESSION['user'] = $username;
                     header("Location: scorelist.php");
                     exit;
                 } else {
-                    echo "<p>Incorrect password.</p>";
+                    // Een foutmelding bij een onjuist wachtwoord weergeven.
+                    echo "<p>Onjuist wachtwoord.</p>";
                 }
             } else {
-                echo "<p>User not found.</p>";
+                // Geeft een melding als de gebruiker niet bestaat/niet geregistreet heeft.
+                echo "<p>Gebruiker niet gevonden.</p>";
             }
+            
 
             $statement->close();
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         } finally {
-            if ($conn) {
-                $conn->close();
+            if ($connection) {
+                $connection->close();
             }
         }
     }

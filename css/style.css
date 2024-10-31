@@ -1,0 +1,185 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body {
+    /* Initial background gradient */
+    background: linear-gradient(90deg, #80b9ff, #dccfed, rgb(255, 225, 55), rgb(33, 0, 151), rgb(12, 0, 75), #7eb8ff);
+    height: 100vh; /* Full viewport height */
+    background-size: 400% 400%; /* Size increased for smoother looping */
+    animation: gradient-animation 222s ease infinite; /* Longer animation for smoother transition */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%; /* Start position */
+    }
+    100% {
+        background-position: 400% 50%; /* End position, moving continuously */
+    }
+}
+
+
+.app {
+        width: 100%;          /* Make the width full (or adjust as needed) */
+        max-width: 800px;    /* Set a new maximum width */
+        margin: 50px auto;   /* Center the div with some top margin */
+        border-radius: 10px;
+        padding: 40px;       /* Increase padding for more space inside */
+        background: linear-gradient(90deg, #ccccfd, #b2f5e3);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add a subtle shadow */
+    }
+
+.app h1 {
+    text-align: center;
+    border-bottom: none;
+    padding-bottom: 20px;
+    color: rgb(80, 80, 255);
+    font-size: 40px;
+    margin: 0; /* Remove margin to make the text align with the content */
+}
+.correct {
+    background: green; /* Color for correct answers */
+    color: #ffffff
+}
+
+.incorrect {
+    background: red; /* Color for incorrect answers */
+    color: #ffffff;
+}
+.quiz {
+    padding: 20px 0;
+}
+
+.quiz h2 {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.btn {
+    background-color: #333333; /* Darker background color */
+    color: white;              /* White text for visibility */
+    font-weight: 500;
+    width: 100%;
+    border: 1px solid #222222;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 1px 2px 2px black; 
+    transition: all 0.1s;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg, #9f9fff, #9affe4); /* Lavender to Soft Cream */
+ /* Swap the colors for a nice hover effect */
+    color: #ffffff; /* Text color for good readability */
+}
+
+#Next-btn {
+    display: block;
+    background-color: lightgreen;
+    color: #ffffff;
+    margin: 20px auto 0;
+    width: 150;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+}
+.correct {
+    background-color: green; /* Green for correct answers */
+    color: white; /* Optional: White text for better contrast */
+}
+
+.incorrect {
+    background-color: red; /* Red for incorrect answers */
+    color: white; /* Optional: White text for better contrast */
+}
+.score-table {
+    width: 75%;
+    border-collapse: collapse;
+}
+.score-table th, .score-table td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+.score-table th {
+    background-color: #f2f2f2;
+}
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px; /* Border radius for rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for effect */
+    width: 300px;
+    text-align: center;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Rounded corners for input fields */
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners for button */
+}
+
+input[type="submit"]:hover {
+    background-color: #218838;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+table {
+    border-collapse: collapse;
+    width: 50%; /* Adjust table width */
+    margin: 0 auto; /* Center the table */
+    background-color: white; /* Background for the table */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd; /* Add border */
+}
+
+th {
+    background-color: #f2f2f2; /* Slightly different background for the header */
+    font-weight: bold;
+    text-align: center; /* Center header text */
+}
+
+td {
+    text-align: center; /* Align all table content to center */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Add zebra stripes */
+}
+
+/* Optional: Responsive design */
+@media (max-width: 768px) {
+    table {
+        width: 90%; /* Make table width adapt on smaller screens */
+    }
+}

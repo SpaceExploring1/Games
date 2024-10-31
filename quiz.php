@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Advanced Quiz</title>
 </head>
 <body>
@@ -45,63 +45,70 @@
         });
 
         function startQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            nextButton.innerHTML = "Next Question";
-            showQuestion();
-        }
+    // Zet de quiz terug naar het begin, waarbij de huidige vraagindex en score worden gereset.
+    currentQuestionIndex = 0;
+    score = 0;
+    nextButton.innerHTML = "Next Question";
+    showQuestion(); // Roept de functie aan om de eerste vraag te tonen.
+}
 
-        function showQuestion() {
-            resetState();
-            let currentQuestion = questions[currentQuestionIndex];
-            questionElement.innerHTML = (currentQuestionIndex + 1) + ". " + currentQuestion.question;
+function showQuestion() {
+    resetState(); // Verwijdert de vorige antwoorden en reset de knop voor de volgende vraag.
+    let currentQuestion = questions[currentQuestionIndex]; // Haalt de huidige vraag op.
+    questionElement.innerHTML = (currentQuestionIndex + 1) + ". " + currentQuestion.question;
 
-            currentQuestion.answers.forEach(answer => {
-                const button = document.createElement("button");
-                button.innerHTML = answer.text;
-                button.classList.add("btn");
-                button.dataset.correct = answer.correct;
-                button.addEventListener("click", selectAnswer);
-                answerButton.appendChild(button);
-            });
-        }
+    // Voor elke antwoordoptie wordt een knop gemaakt en aan het scherm toegevoegd.
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement("button");
+        button.innerHTML = answer.text;
+        button.classList.add("btn");
+        button.dataset.correct = answer.correct; // Slaat op of het antwoord correct is.
+        button.addEventListener("click", selectAnswer); // Voegt een event listener toe voor klik op antwoord.
+        answerButton.appendChild(button);
+    });
+}
+function selectAnswer(e) {
+    const selectedBtn = e.target;
+    const isCorrect = selectedBtn.dataset.correct === "true";
+    if (isCorrect) {
+        // Als het antwoord correct is, wordt de knop groen gekleurd en de score verhoogd.
+        selectedBtn.classList.add("correct");
+        score++;
+    } else {
+        // Bij een fout antwoord wordt de knop rood gekleurd.
+        selectedBtn.classList.add("incorrect");
+    }
+    nextButton.style.display = "block"; // Toon de knop voor de volgende vraag.
+}
+function resetState() {
+    nextButton.style.display = "none"; // Verberg de volgende vraag-knop.
+    while (answerButton.firstChild) {
+        answerButton.removeChild(answerButton.firstChild); // Verwijder alle antwoordopties.
+    }
+}
+function endQuiz() {
+    // Geef de eindscore weer en bereidt voor om het naar scorelist.php te sturen.
+    questionElement.innerHTML = `Quiz complete! Your score: ${score} out of ${questions.length}`;
+    answerButton.innerHTML = ''; 
+    nextButton.style.display = "none";
 
-        function selectAnswer(e) {
-            const selectedBtn = e.target;
-            const isCorrect = selectedBtn.dataset.correct === "true";
-            if (isCorrect) {
-                selectedBtn.classList.add("correct");
-                score++;
-            } else {
-                selectedBtn.classList.add("incorrect");
-            }
-            nextButton.style.display = "block";
-        }
+    const form = document.createElement("form");
+    form.action = "scorelist.php"; // Stel de actie in om naar scorelist.php te gaan.
+    form.method = "GET";
 
-        function resetState() {
-            nextButton.style.display = "none";
-            while (answerButton.firstChild) {
-                answerButton.removeChild(answerButton.firstChild);
-            }
-        }
+    // Toevoegen van de score-invoer (deze ontbrekende variabele moet worden gemaakt).
+    const scoreInput = document.createElement("input");
+    scoreInput.type = "hidden";
+    scoreInput.name = "score";
+    scoreInput.value = score;
+    form.appendChild(scoreInput);
 
-        function endQuiz() {
-            questionElement.innerHTML = `Quiz complete! Your score: ${score} out of ${questions.length}`;
-            answerButton.innerHTML = ''; 
-            nextButton.style.display = "none";
+    document.body.appendChild(form);
 
-            const form = document.createElement("form");
-            form.action = "scorelist.php"; // Redirect to scorelist.php
-            form.method = "GET";
+    form.submit(); // Verzendt het formulier automatisch.
+}
+startQuiz(); // Start de quiz automatisch bij het laden van de pagina.
 
-            form.appendChild(scoreInput);
-
-            document.body.appendChild(form);
-
-            form.submit(); // Automatically submits the form
-        }
-
-        startQuiz();
     </script>
 </body>
 </html>
