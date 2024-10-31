@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Score List</title>
 </head>
 <body>
-    <h1>Registered Users</h1>
+    <h1>Scorelijst van Geregistreerde Gebruikers</h1>
 
     <?php
-    session_start(); // Start de sessie om sessievariabelen te kunnen gebruiken
-
-    // Controleer of de gebruiker is ingelogd; zo niet, doorverwijzen naar login.php
+    session_start(); // Start de sessie om toegang te krijgen tot sessievariabelen
+    
+    // Controleer of de gebruiker is ingelogd; zo niet, doorverwijzen naar inlogpagina
     if (!isset($_SESSION['user'])) {
         header("Location: login.php");
         exit;
     }
 
     // Welkomstbericht voor de ingelogde gebruiker
-    echo "<p>Welcome, " . htmlspecialchars($_SESSION['user']) . "!</p>";
+    echo "<p>Welkom, " . htmlspecialchars($_SESSION['user']) . "!</p>";
 
-    // Databaseverbinding configureren
+    // Databaseverbinding instellen
     $host = "localhost";
     $user = "root";
     $pass = "root"; 
@@ -29,37 +29,44 @@
 
     try {
         // Maak verbinding met de database
-        $connection = new mysqli($host, $user, $pass, $database);
+        $conn = new mysqli($host, $user, $pass, $database);
 
-        // Controleer of er een fout is bij de verbinding
-        if ($connection->connect_error) {
-            throw new Exception("Connection failed: " . $connection->connect_error);
+        // Controleer op fouten in de verbinding
+        if ($conn->connect_error) {
+            throw new Exception("Verbindingsfout: " . $conn->connect_error);
         }
 
-        // Query om alle gebruikers uit de registratie-tabel op te halen
-        $query = "SELECT user FROM registration";
-        $result = $connection->query($query);
+        // Query om gebruikers en scores op te halen uit de registratie-tabel
+        $query = "SELECT user, score FROM registration ORDER BY score DESC";
+        $result = $conn->query($query);
 
-        // Controleer of er gebruikers in de tabel staan
+        // Controleer of er resultaten zijn gevonden
         if ($result->num_rows > 0) {
-            echo "<ul>";
-            // Loop door de resultaten en toon elke gebruikersnaam in een lijst
+            // Start de tabel
+            echo "<table>";
+            echo "<tr><th>Gebruiker</th><th>Score</th></tr>"; // Tabelkoppen voor gebruiker en score
+
+            // Resultaten doorlopen en elke rij in de tabel tonen
             while ($row = $result->fetch_assoc()) {
-                echo "<li>" . htmlspecialchars($row['user']) . "</li>";
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row['user']) . "</td>"; // Gebruikersnaam
+                echo "<td>" . htmlspecialchars($row['score']) . "</td>"; // Score
+                echo "</tr>";
             }
-            echo "</ul>";
+
+            echo "</table>"; // Sluit de tabel af
         } else {
-            // Geef een melding als er geen geregistreerde gebruikers zijn gevonden
-            echo "<p>No registered users found.</p>";
+            // Geen resultaten gevonden, een bericht tonen
+            echo "<p>Geen geregistreerde gebruikers gevonden.</p>";
         }
 
     } catch (Exception $e) {
-        // Toon foutmelding indien een uitzondering wordt opgevangen
-        echo "Error: " . $e->getMessage();
+        // Toon foutmelding indien er een uitzondering optreedt
+        echo "Fout: " . $e->getMessage();
     } finally {
-        // Sluit de databaseverbinding
-        if ($connection) {
-            $connection->close();
+        // Sluit de databaseverbinding af
+        if ($conn) {
+            $conn->close();
         }
     }
     ?>
