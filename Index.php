@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<a href="registrate.php">Register</a></li>
-<a href="login.php">Login</a></li>
+<a href="registrate.php">Register</a>
+<a href="login.php">Login</a>
 </body>
 </html>
