@@ -13,13 +13,15 @@
     session_start(); // Start de sessie om toegang te krijgen tot sessievariabelen
     
     // Controleer of de gebruiker is ingelogd; zo niet, doorverwijzen naar inlogpagina
+    session_start();
+
     if (!isset($_SESSION['user'])) {
-        header("Location: login.php");
-        exit;
+    header("Location: login.php");
+    exit;
     }
 
-    // Welkomstbericht voor de ingelogde gebruiker
     echo "<p>Welkom, " . htmlspecialchars($_SESSION['user']) . "!</p>";
+
 
     // Databaseverbinding instellen
     $host = "localhost";
@@ -31,7 +33,7 @@
         // Maak verbinding met de database
         $connection = new mysqli($host, $user, $pass, $database);
 
-        // Controleer op fouten in de verbinding
+        // Controleer voor fouten in de verbinding
         if ($connection->connect_error) {
             throw new Exception("Verbindingsfout: " . $connection->connect_error);
         }
